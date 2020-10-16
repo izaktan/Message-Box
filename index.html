@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>留言箱</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha512-rO2SXEKBSICa/AfyhEK5ZqWFCOok1rcgPYfGOqtX35OyiraBg6Xa4NnBJwXgpIRoXeWjcAmcQniMhp22htDc6g==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-vue/2.17.3/bootstrap-vue.min.css" integrity="sha512-j0tbUxQhCImdCO6ZCntJhQIrzUYUwFPqKHCuHT8bRUBFDMUkVUpl4VT5gt+rR+UfEFXZxgpwPFiwBZ6U3GrZ5g==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-vue/2.17.3/bootstrap-vue.min.js" integrity="sha512-AktidHT1Q3QYOwbGQiURvDiOznelI/89m+qDG7OoV/pUQOZE83QlVacIALtZK7Gk0xQ5B9OLcrKDU+GsyWRpYg==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/loader.css">
+</head>
+<body class="d-flex flex-column justify-content-between container">
+    <div id="crud-app" class="mt-5">
+        <div id="loader" v-show='loading'>
+            <div class="sk-folding-cube">
+                <div class="sk-cube1 sk-cube"></div>
+                <div class="sk-cube2 sk-cube"></div>
+                <div class="sk-cube4 sk-cube"></div>
+                <div class="sk-cube3 sk-cube"></div>
+              </div>
+        </div>
+
+        <div class="form-group">
+            <textarea class="form-control" id="input" rows="3" v-model='inputContent' placeholder="请在此输入你想说的话..."></textarea>
+          </div>
+          <button type="button" class="btn btn-primary" @click='addRecord()'>提交</button>
+        <div v-if="loading" class="my-3">Loading...</div>
+        <div v-else-if="jsonData=='empty'" class="my-3">暂时还没有留言哦...</div>
+        <div v-else>
+            <div class="my-5">
+                <div class="input-group mx-auto mt-5 mb-4">
+                    <div class="input-group-prepend">
+                    <span class="input-group-text">搜索内容：</span>
+                    </div>
+                <input type="text" v-model="searchQuery" id="search-bar" class="form-control">
+                </div>
+
+                <!-- <div class="card bg-light mb-4 content">
+                    <div class="card-header">
+                        <div>
+                            time
+                            <div class="float-right">第0楼</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">orvfnerovof</p>
+                        <button class="btn btn-primary float-right reply" v-b-modal.my-modal>回复</button>
+                    </div>
+                    
+
+
+                    <div class="card bg-light">
+                        <div class="card-header">
+                            <p class="card-text pl-5">time</p>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text pl-5">回复</p>
+                        </div>
+                    </div>
+                </div> -->
+
+            </div>
+            
+                <div v-for="(api, index) in searchData(searchQuery).reverse()" v-cloak :key="index">
+                    <div class="card bg-light mb-4">
+                        <div class="card-header">
+                            <div>
+                                {{api.time}}
+                                <div class="float-right">第{{api.real_index+1}}楼</div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{api.content}}</p>
+                            <button class="btn btn-primary float-right reply" v-b-modal="'modal_'+api.id">回复</button>
+                        </div>
+                        <div v-for="reply_obj in api.replies" v-cloak>
+                            <div class="card bg-light">
+                                <div class="card-header">
+                                    <p class="card-text pl-5">{{reply_obj.time}}</p>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text pl-5">{{reply_obj.reply}}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <b-modal :id="'modal_'+api.id" :title="'回复：“'+api.content+'”'" ok-title="提交" cancel-title="取消" @ok="addReply($event, api.id)">
+                                <b-form-textarea class="form-control" id="replyInput" rows="3" v-model='replyContent' placeholder="请在此输入你的回复..." required></b-form-textarea>
+                        </b-modal>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="">
+        <footer class="text-center">
+            <p class="mb-0">
+               Copyright © 2015-2020 <b>ORGANIZATION</b>
+            </p>
+            <p>
+               Designed and Built by <a class="name" href="https://izaktan.tech" target="_blank"><b>Xiao Tan</b></a>
+            </p>
+         </footer>
+    </div>
+    <script src="main.js"></script>
+</body>
+
+</html>

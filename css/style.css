@@ -1,0 +1,19 @@
+html, body{
+    min-height: 100vh;
+}
+
+.card-text {
+    white-space: pre;
+}
+
+
+/* .reply {
+    display: none;
+}
+.content:hover .reply{
+    display: block;
+    color: #007bff;
+    text-decoration: underline;
+    cursor: pointer;
+} */
+
